@@ -1,6 +1,7 @@
 <script lang="ts">
   import axios from "axios";
   import { onMount } from "svelte";
+  import { fade, fly } from "svelte/transition";
 
   let text = "";
   let images: {
@@ -38,9 +39,9 @@
     </div>
   </div>
   <div class="images">
-    {#each images as image}
+    {#each images as image, i (image.id)}
       <div class="image">
-        <img src={image.urls.regular} alt={image.alt_description} class="image" />
+        <img src={image.urls.regular} alt={image.alt_description} in:fly={{ y: 200, duration: 1000, delay: i * 100 }} />
       </div>
     {/each}
   </div>
@@ -88,5 +89,9 @@
   .image {
     width: 400px;
     margin: 10px;
+  }
+
+  .image img {
+    width: 100%;
   }
 </style>
