@@ -16,28 +16,33 @@
     const response = await axios.get(`https://api.unsplash.com/search/photos?query=${text || "nature"}&client_id=${accessKey}`);
 
     images = response.data.results;
-    console.log(images);
   };
 
   onMount(() => {
     fetchData();
   });
+
+  const search = async () => {
+    if (!text) return;
+    await fetchData();
+    text = "";
+  };
 </script>
 
 <div class="container">
   <div class="header">
     <h1>Image Gallery</h1>
     <div class="search-bar">
-      <input type="text" placeholder="Search" />
-      <button>Search</button>
+      <input type="text" placeholder="Search" bind:value={text} />
+      <button on:click={search}>Search</button>
     </div>
   </div>
   <div class="images">
-    <img src="" alt="" class="image" />
-    <img src="" alt="" class="image" />
-    <img src="" alt="" class="image" />
-    <img src="" alt="" class="image" />
-    <img src="" alt="" class="image" />
+    {#each images as image}
+      <div class="image">
+        <img src={image.urls.regular} alt={image.alt_description} class="image" />
+      </div>
+    {/each}
   </div>
 </div>
 
@@ -82,7 +87,6 @@
 
   .image {
     width: 400px;
-    height: 200px;
     margin: 10px;
   }
 </style>
