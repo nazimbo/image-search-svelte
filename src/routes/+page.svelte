@@ -1,4 +1,28 @@
-<script></script>
+<script lang="ts">
+  import axios from "axios";
+  import { onMount } from "svelte";
+
+  let text = "";
+  let images: {
+    id: string;
+    alt_description: string;
+    urls: {
+      regular: string;
+    };
+  }[] = [];
+
+  const fetchData = async () => {
+    const accessKey = import.meta.env.VITE_ACCESS_KEY;
+    const response = await axios.get(`https://api.unsplash.com/search/photos?query=${text || "nature"}&client_id=${accessKey}`);
+
+    images = response.data.results;
+    console.log(images);
+  };
+
+  onMount(() => {
+    fetchData();
+  });
+</script>
 
 <div class="container">
   <div class="header">
